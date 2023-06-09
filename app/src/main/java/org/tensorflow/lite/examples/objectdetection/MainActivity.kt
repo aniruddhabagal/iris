@@ -42,7 +42,8 @@ class MainActivity : AppCompatActivity() {
             if (status == TextToSpeech.SUCCESS) {
                 tts?.language = Locale.US
                 // Show the welcoming message
-                tts?.speak("Welcome to RAYS, Here are the List of commands: Start Detection, Stop Detection, Navigate. How may I help you?", TextToSpeech.QUEUE_FLUSH, null, null)
+                // Add navigate
+                tts?.speak("Welcome to IRIS, Here are the List of commands: Start Detection, Stop Detection, Navigate. How may I help you?", TextToSpeech.QUEUE_FLUSH, null, null)
                 startListening()
             }
         })
@@ -75,13 +76,20 @@ class MainActivity : AppCompatActivity() {
                         tts?.speak("Object Detection Initialised", TextToSpeech.QUEUE_FLUSH, null, null)
                         startDetection()
                     } else if (spokenText.contains("stop detection") || spokenText.contains("stop detecting")) {
-                        tts?.speak("Object Detection Terminated", TextToSpeech.QUEUE_FLUSH, null, null)
+                        tts?.speak(
+                            "Object Detection Terminated",
+                            TextToSpeech.QUEUE_FLUSH,
+                            null,
+                            null
+                        )
                         stopDetection()
-                    }else if (spokenText.contains("navigate to")) {
+                    }
+                    else if (spokenText.contains("navigate to")) {
                         destination = spokenText.substringAfter("navigate to").trim()
                         tts?.speak("Navigating Maps", TextToSpeech.QUEUE_FLUSH, null, null)
                         startNavigation(destination)
-                    }else{
+                    }
+                    else{
                         startListening()
                     }
                     if(detectionRunning){
@@ -121,6 +129,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
     private fun startNavigation(destination: String?) {
         if (!destination.isNullOrEmpty()) {
             val gmmIntentUri = Uri.parse("google.navigation:q=$destination + \"&mode=w\"")
@@ -132,7 +141,6 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Destination not set", Toast.LENGTH_SHORT).show()
         }
     }
-
 
     override fun onDestroy() {
         super.onDestroy()
